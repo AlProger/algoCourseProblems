@@ -1,12 +1,6 @@
 #include <iostream>
 #include <vector>
 
-void print(std::vector<int> &vector) {
-    for (auto elem : vector)
-        std::cout << elem << " ";
-    std::cout << "\n";
-}
-
 int main() {
     size_t N = 0;
     std::cin >> N;
@@ -60,8 +54,6 @@ int main() {
                 ++j;
             }
         }
-        std::cout << "i:" << i << " " << "j:" << j << "\n";
-        print(result);
     }
     for (auto &elem : result)
         std::cout << elem << " ";
