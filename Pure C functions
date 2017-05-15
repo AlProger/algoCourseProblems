@@ -1,0 +1,40 @@
+#include <cstddef>
+
+namespace my_cstring {
+    // strcmp
+    int strcmp(const char * s1, const char * s2){
+        int counter = 0;
+        while (*(s1) || *(s2)) {
+            counter = *s1 - *s2;
+            if (counter != 0)
+                break;
+            ++s1;
+            ++s2;
+        }
+        return counter;
+    }
+    
+    // strcat
+    char *strcat(char *destination, const char *source) {
+        char * str = destination;
+        while (*str) ++str;
+        while (*(str++) = *(source++));
+        return destination;
+    }
+    
+    // strcpy
+    char * strcpy(char * destination, const char * source) {
+        char * str = destination;
+        while ((*(str++) = *(source++)) != 0);
+        return destination;
+    }
+    
+    // strlen
+    size_t strlen(const char * s) {
+        size_t counter = 0;
+        while (*(s++) != '\0') {
+            ++counter;
+        }
+        return counter;
+    }
+}
