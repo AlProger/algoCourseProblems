@@ -1,0 +1,41 @@
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+std::vector<int>::iterator partition(std::vector<int>::iterator left, std::vector<int>::iterator right) {
+    int elem = *(left + rand() % (right - left + 1));
+    while (left <= right) {
+        while (*left < elem) {
+            ++left;
+        }
+        while (*right > elem) {
+            --right;
+        }
+        if (left <= right) {
+            std::swap(*left++, *right--);
+        }
+    }
+    return left;
+}
+
+int mediana(std::vector<int>::iterator left, std::vector<int>::iterator right, int size) {
+    if (left >= right) return *left;
+    auto pivot = partition(left, right);
+    auto length = pivot - left + 1;
+    if (length == size) return *pivot;
+    else if (size < length)
+        return mediana(left, pivot - 1, size);
+    else
+        return mediana(pivot + 1, right, size - length);
+}
+
+int main() {
+    size_t N = 0;
+    std::cin >> N;
+    std::vector<int> array(N);
+    for (size_t i = 0; i != N; ++i)
+        std::cin >> array[i];
+    std::cout << median(array.begin(), array.end() - 1, (N - 1) / 2 + 1);
+}
