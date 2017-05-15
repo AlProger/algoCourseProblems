@@ -1,0 +1,181 @@
+#include <cstddef>
+#include <iostream>
+
+class Tree {
+    // Node
+ private:
+    class Node {
+     public:
+        size_t data = 0;
+        size_t height = 0;
+        Node *parent;
+        Node *leftCh = nullptr;
+        Node *rightCh = nullptr;
+        size_t count = 1;
+        size_t number = 0;
+        
+        std::string color = "B";
+
+     public:
+        explicit Node(size_t data_) : data(data_) {
+        }
+
+        Node(size_t data_, Node *parent_) : data(data_), parent(parent_) {
+        }
+    };
+
+    // root
+    Node *root = nullptr;
+
+ private:
+    static void DestroyNode(Node *node) {
+        if (node) {
+            DestroyNode(node->leftCh);
+            DestroyNode(node->rightCh);
+            delete node;
+        }
+    }
+
+ public:
+    Tree() {}
+
+    void insert(size_t number) {
+        Node **cur = &root;
+        while (*cur) {
+            Node &node = **cur;
+            if (number < node.data) {
+                cur = &node.leftCh;
+            } else if (number > node.data) {
+                cur = &node.rightCh;
+            } else {
+                ++node.count;
+                return;
+            }
+        }
+        *cur = new Node(number);
+    }
+
+    int height(Node *node) {
+        if (node) return 1 + std::max(height(node->leftCh), height(node->rightCh));
+        else
+            return -1;
+    }
+
+    int height() {
+        return height(root) + 1;
+    }
+
+    void secondMaximum(Node *root, int *count) {
+        if (!root) return;
+
+        secondMaximum(root->rightCh, count);
+
+        if (++(*count) == 2) {
+            std::cout << root->data << "\n";
+        }
+        if (*count < 2) {
+            secondMaximum(root->leftCh, count);
+        }
+    }
+
+    void secondMaximum() {
+        int count = 0;
+        secondMaximum(root, &count);
+    }
+
+    void inOrder(Node *node) {
+        if (node) {
+            inOrder(node->leftCh);
+            std::cout << node->data << " " << node->count << "\n";
+            inOrder(node->rightCh);
+        }
+    }
+
+    void inOrder() {
+        inOrder(root);
+    }
+
+    void leaves(Node *node) {
+        if (node) {
+            leaves(node->leftCh);
+            if (!node->leftCh && !node->rightCh)
+                std::cout << node->data << "\n";
+            leaves(node->rightCh);
+        }
+    }
+
+    void leaves() {
+        leaves(root);
+    }
+
+    void nodeTwo(Node *node) {
+        if (node) {
+            nodeTwo(node->leftCh);
+            if (node->leftCh && node->rightCh)
+                std::cout << node->data << "\n";
+            nodeTwo(node->rightCh);
+        }
+    }
+
+    void nodeTwo() {
+        nodeTwo(root);
+    }
+
+    void stick(Node *node) {
+        if (node) {
+            stick(node->leftCh);
+            if ((node->leftCh && !node->rightCh) || (node->rightCh && !node->leftCh))
+                std::cout << node->data << "\n";
+            stick(node->rightCh);
+        }
+    }
+
+    void stick() {
+        stick(root);
+    }
+
+    int balanced(Node *node) {
+        if (!node) {
+            return 0;
+        }
+        int leftSubtreeHeight = balanced(node->leftCh);
+        if (leftSubtreeHeight == -1) return -1;
+        int rightSubtreeHeight = balanced(node->rightCh);
+        if (rightSubtreeHeight == -1) return -1;
+        if (std::abs(leftSubtreeHeight - rightSubtreeHeight) > 1) {
+            return -1;
+        }
+        return (std::max(leftSubtreeHeight, rightSubtreeHeight) + 1);
+    }
+
+    void balanced() {
+        if (balanced(root) == -1)
+            std::cout << "NO";
+        else
+            std::cout << "YES";
+    }
+
+    int redblack(Node *node) {
+        if (!node)
+            return 0;
+        int leftHeight = redblack(node->leftCh);
+        int rightHeight = redblack(node->rightCh);
+        int add = node->color == "B" ? 1 : 0;
+        if (leftHeight == -1 || rightHeight == -1 || leftHeight != rightHeight)
+            return -1;
+        else
+            return leftHeight + add;
+    }
+
+    void redblack() {
+        if (redblack(root) == -1)
+            std::cout << "NO";
+        else
+            std::cout << "YES";
+    }
+
+    ~Tree() {
+        DestroyNode(root);
+    }
+
+};
